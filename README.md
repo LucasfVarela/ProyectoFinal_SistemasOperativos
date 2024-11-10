@@ -3,6 +3,7 @@ Integrantes del Grupo:
  * Tobio Gabriel
  * Piccotto Valentino
  * Varela Lucas
+
 Este proyecto es un script en Bash que implementa un menú interactivo para simplificar y automatizar una variedad de tareas comunes en sistemas Linux. Diseñado para facilitar la administración y gestión del sistema, este menú permite ejecutar comandos esenciales con un solo paso, ideal para principiantes y profesionales que busquen ahorrar tiempo en su flujo de trabajo.
 
 Características
