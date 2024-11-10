@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto de Automatización en Bash</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            color: #4CAF50;
+            font-size: 2.5em;
+        }
+        .menu {
+            margin-top: 20px;
+        }
+        .menu-item {
+            padding: 15px;
+            margin: 10px 0;
+            background-color: #4CAF50;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .menu-item:hover {
+            background-color: #45a049;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 500px;
+            text-align: left;
+            animation: fadeIn 0.5s ease;
+        }
+        .close-btn {
+            float: right;
+            font-size: 1.5em;
+            color: #aaa;
+            cursor: pointer;
+        }
+        .code {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            color: #333;
+            white-space: pre-wrap;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 0.8em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Proyecto de Automatización en Bash</h1>
+        <p>Este proyecto es un script en Bash que proporciona un menú interactivo para automatizar tareas comunes en Linux, ideal para simplificar el trabajo de administración del sistema.</p>
+
+        <h2>Opciones del Menú</h2>
+        <div class="menu">
+            <div class="menu-item" onclick="showModal(1)">1. Abrir el editor de texto (nano)</div>
+			<div class="menu-item" onclick="showModal(2)">2. Modificar texto con nano</div>
+            <div class="menu-item" onclick="showModal(3)">3. Eliminar un archivo</div>
+            <div class="menu-item" onclick="showModal(4)">4. Mostrar el contenido de un directorio</div>
+            <div class="menu-item" onclick="showModal(5)">5. Buscar un archivo por nombre</div>
+            <div class="menu-item" onclick="showModal(6)">6. Mostrar el espacio libre en disco</div>
+            <div class="menu-item" onclick="showModal(7)">7. Mostrar la información de la red</div>
+            <div class="menu-item" onclick="showModal(8)">8. Monitorear procesos activos</div>
+            <div class="menu-item" onclick="showModal(9)">9. Crear un nuevo usuario</div>
+            <div class="menu-item" onclick="showModal(10)">10. Buscar texto dentro de un archivo</div>
+            <div class="menu-item" onclick="showModal(11)">11. Realizar un respaldo de un directorio</div>
+            <div class="menu-item" onclick="showModal(12)">12. Cambiar permisos de un archivo o directorio</div>
+            <div class="menu-item" onclick="showModal(13)">13. Verificar puertos abiertos</div>
+            <div class="menu-item" onclick="showModal(14)">14. Mostrar uso de memoria RAM</div>
+            <div class="menu-item" onclick="showModal(15)">15. Copiar un archivo o directorio</div>
+            
+        </div>
+
+        <!-- Modal -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <h3 id="modal-title"></h3>
+                <p id="modal-description"></p>
+                <div class="code" id="modal-code"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2024 Proyecto de Automatización en Bash.Integrantes Tobio Gabriel, Picotto Valentino y Varela Lucas.</p>
+        </div>
+    </div>
+
+    <script>
+        const descriptions = [
+            "Abrir el editor de texto Nano.",
+			"Modificar  texto con nano.",
+            "Eliminar un archivo al especificar su ruta.",
+            "Mostrar el contenido detallado de un directorio.",
+            "Buscar un archivo específico por su nombre en todo el sistema.",
+            "Mostrar el espacio libre en el disco.",
+            "Mostrar la configuración de red actual.",
+            "Ver una lista de los procesos activos ordenados por uso de CPU.",
+            "Crear un nuevo usuario en el sistema.",
+            "Buscar un texto específico dentro de un archivo.",
+            "Realizar un respaldo comprimido de un directorio especificado.",
+            "Cambiar permisos de un archivo o directorio.",
+            "Verificar los puertos abiertos en el sistema.",
+            "Mostrar el uso actual de la memoria RAM.",
+            "Copiar un archivo o directorio a una nueva ubicación."
+            
+        ];
+
+        const codes = [
+            "nano",
+			"nano [ruta_del_archivo]",
+            "rm [ruta_del_archivo]",
+            "ls -la [ruta_del_directorio]",
+            "find / -name [nombre_del_archivo]",
+            "df -h",
+            "ip a",
+            "ps aux --sort=-%cpu | head -n 10",
+            "sudo useradd -m [nuevo_usuario]",
+            "grep '[texto_a_buscar]' [ruta_del_archivo]",
+            "tar -czvf [archivo_respaldo].tar.gz [ruta_del_directorio]",
+            "chmod [permisos] [ruta_del_archivo_o_directorio]",
+            "sudo netstat -tuln",
+            "free -h",
+            "cp -r [ruta_origen] [ruta_destino]"
+            
+        ];
+
+        function showModal(option) {
+            document.getElementById("modal-title").innerText = `Opción ${option}`;
+            document.getElementById("modal-description").innerText = descriptions[option - 1];
+            document.getElementById("modal-code").innerText = codes[option - 1];
+            document.getElementById("modal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+       
+        window.onclick = function(event) {
+            const modal = document.getElementById("modal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+    </script>
+</body>
+</html>
